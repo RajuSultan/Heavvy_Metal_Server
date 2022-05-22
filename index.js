@@ -57,9 +57,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    console.log("john is running")
-    res.send("john is okay");
+    console.log("menuffacturer is running")
+    res.send("menuffacturer is okay");
 });
 app.listen(port, () => {
-    console.log("john  running on :", port)
+    console.log("menuffacturer running on :", port)
 });
