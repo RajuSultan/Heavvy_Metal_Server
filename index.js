@@ -42,7 +42,26 @@ async function run() {
         const collection = client.db("menufacturer").collection("products");
         const userCollection = client.db("menufacturer").collection("user");
         const cartCollection = client.db("menufacturer").collection("cart");
+        const paymentCollection = client.db("menufacturer").collection("payment");
+        const reviewCollection = client.db("menufacturer").collection("review");
         // console.log("raju");
+
+        app.post('/review', async (req, res) => {
+            const review = req.body;
+            console.log(review);
+            const result = await reviewCollection.insertOne(review);
+            // const result = { stutaus: "success" }
+            res.send(result);
+        });
+
+
+        app.get('/review', async (req, res) => {
+            const query = {};
+            const cursor = reviewCollection.find(query);
+            const products = await cursor.toArray();
+            res.send(products);
+
+        })
 
         app.get('/products', async (req, res) => {
 
@@ -152,6 +171,21 @@ async function run() {
                 });
                 res.send({ clientSecret: paymentIntent.client_secret })
             }
+        })
+
+        app.patch('/cart/:id', async (req, res) => {
+            const id = req.params.id;
+            const payment = req.body;
+            const filter = { _id: ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    paid: true,
+                    transactionId: payment.transactionId
+                }
+            }
+            const updateBooking = await cartCollection.updateOne(filter, updateDoc);
+            const result = await paymentCollection.insertOne(payment);
+            res.send(updateDoc);
         })
 
 
