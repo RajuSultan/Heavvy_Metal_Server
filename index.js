@@ -44,7 +44,36 @@ async function run() {
         const cartCollection = client.db("menufacturer").collection("cart");
         const paymentCollection = client.db("menufacturer").collection("payment");
         const reviewCollection = client.db("menufacturer").collection("review");
+        const profileCollection = client.db("menufacturer").collection("profile");
         // console.log("raju");
+
+        app.post('/addproduct', async (req, res) => {
+            const addproduct = req.body;
+            // console.log(review);
+            const result = await collection.insertOne(addproduct);
+            res.send(result);
+        });
+
+        app.put('/profile/:email', async (req, res) => {
+            const email = req.params.email;
+            console.log(email);
+            const profile = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: profile,
+            };
+            const result = await profileCollection.updateOne(filter, updateDoc, options);
+            // const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '365d' })
+            res.send(result);
+        })
+
+        app.get('/profile/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await profileCollection.findOne(query);
+            res.send(result);
+        });
 
         app.post('/review', async (req, res) => {
             const review = req.body;
