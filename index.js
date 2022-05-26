@@ -22,8 +22,6 @@ function verifyJWT(req, res, next) {
         return res.status(401).send({ message: 'unAuthorized' });
     }
     const token = authorization.split(' ')[1];
-    // console.log(authorization);
-    // console.log(token);
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
         console.log(decoded)
         if (err) {
