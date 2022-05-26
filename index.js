@@ -165,7 +165,6 @@ async function run() {
             // const email = req.params.email;
             const cartItem = req.body;
             const result = await cartCollection.insertOne(cartItem);
-            // const result = { stutaus: "success" }
             res.send(result);
         })
 
